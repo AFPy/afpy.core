@@ -1,0 +1,14 @@
+A clean way to get some config vars::
+
+
+  >>> from afpy.core import config
+  >>> username, password = config.ldap_binder()
+  >>> username
+  'binder'
+  >>> len(password) > 1
+  True
+
+
+  >>> '/afpy/' in config.zope_admin_url()
+  True
+

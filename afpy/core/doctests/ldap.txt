@@ -1,0 +1,96 @@
+LDAP
+----
+
+this is the ldap module::
+
+    >>> from afpy.core import ldap
+
+date utils::
+
+    >>> from datetime import datetime
+    >>> date = datetime(2007,12,31)
+    >>> ldap.date2string('2007/12/31')
+    '20071231000000Z'
+    >>> ldap.date2string('31/12/2007')
+    '20071231000000Z'
+    >>> ldap.date2string('20071231')
+    '20071231000000Z'
+    >>> ldap.date2string('20071231000000Z')
+    '20071231000000Z'
+    >>> d = ldap.date2string(date)
+    >>> d
+    '20071231000000Z'
+    >>> ldap.string2date(d)
+    datetime.datetime(2007, 12, 31, 0, 0)
+
+provide a user object::
+
+    >>> gawel = ldap.User('gawel')
+    >>> gawel
+    <User dn:uid=gawel,ou=members,dc=afpy,dc=org>
+
+get a mail::
+
+    >>> gawel.mail
+    'gawel@afpy.org'
+
+set members of a group::
+
+    >>> 'gawel' in ldap.setMembersOf('bureau', ['tarek','ogrisel','bader','gwen', 'gawel', 'lunatik'])
+    True
+
+    >>> 'svn' in gawel.groups
+    True
+
+get current members::
+
+    >>> 'gawel' in ldap.getAdherents()
+    True
+
+    >>> dates = ldap.updateExpirationDate()
+
+del for testing:
+
+    >>> if ldap.isUser('test_user'):
+    ...     ldap.delUser('test_user')
+    
+
+test user existance::
+
+    >>> ldap.isUser('test_user')
+    False
+
+add a user::
+
+    >>> ldap.addUser('test_user', birthDate='10/04/1975')
+    >>> ldap.isUser('test_user')
+    True
+
+update a user::
+
+    >>> user = ldap.User('test_user')
+
+    >>> user.edit(mail='test_user@afpy.org')
+
+change password::
+
+    >>> ldap.changePassword('test_user', 'test_password')
+    >>> user.checkCredentials('failed')
+    False
+    >>> test_conn = user.checkCredentials('test_password')
+
+add a payment::
+
+    >>> ldap.addPayment('test_user', paymentDate='31/12/2007')
+
+get props:
+
+    >>> user.birthDate
+    datetime.datetime(1975, 4, 10, 0, 0)
+
+del user::
+
+    >>> ldap.delUser('test_user')
+    >>> ldap.isUser('test_user')
+    False
+
